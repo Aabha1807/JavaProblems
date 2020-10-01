@@ -1,0 +1,108 @@
+import java.util.*;
+class MyException{
+    int numbers[] = new int[10];
+    MyException(){
+        for(int i =0;i<numbers.length;i++){
+        numbers[i] = 0;
+        }
+    }
+    void setNumber(String index,String number) throws ArgumentException,IndexOutOfRangeException{
+        int num,ind;
+        try{
+        num = Integer.parseInt(number);
+        }
+        catch(NumberFormatException e){
+            throw new ArgumentException();
+        }
+        try{
+        ind = Integer.parseInt(index);
+        }
+        catch(NumberFormatException e){
+            throw new ArgumentException();
+        }
+        if(num<-32768||num>32767)
+            throw new ArgumentException();
+        else if(ind<0||ind>10)
+            throw new IndexOutOfRangeException();
+        else
+            numbers[ind] = num; 
+    }
+    
+    int getNumber(String index)throws ArgumentException,IndexOutOfRangeException{ 
+       int ind,num;
+        try{
+            ind = Integer.parseInt(index);
+        }
+        catch(NumberFormatException e){
+            throw new ArgumentException();
+        }
+        
+        if(ind<0||ind>10)
+            throw new IndexOutOfRangeException();
+        else{
+            num = numbers[ind];
+            if(num<-32768||num>32767)
+                throw new ArgumentException();
+        }
+        return num;
+    }
+}
+class ArgumentException extends Exception{
+}
+class IndexOutOfRangeException extends Exception{
+}
+public class ProblemSolution{
+    public static void main(String[] args){
+        ArrayList<String> index = new ArrayList<String>();
+        ArrayList<String> value = new ArrayList<String>();
+        ArrayList<String> searchindex = new ArrayList<String>();
+        Scanner input = new Scanner(System.in);
+        for(int i = 0;i<3;i++){
+            try{
+                String inp[] = input.nextLine().split(" ");
+                for(int j=0;j<inp.length;j++){
+                    if(i==0)
+                        index.add(inp[j]);
+                    else if(i==1)
+                        value.add(inp[j]);
+                    else
+                        searchindex.add(inp[j]);
+                }
+            }
+            catch(NoSuchElementException e){
+                System.out.println("System.ArgumentException");
+            }
+        }
+        MyException exception = new MyException();
+        for(int i =0;i<index.size();i++){
+            try
+            {
+            exception.setNumber(index.get(i),value.get(i));
+            }
+            catch(ArgumentException e)
+            {
+                System.out.println("System.ArgumentException");
+            }
+            catch(IndexOutOfRangeException e){
+                System.out.println("System.IndexOutOfRangeException");
+            }
+            catch(IndexOutOfBoundsException e){
+                System.out.println("System.IndexOutOfRangeException");
+            }
+        }
+        for(int i=0;i<searchindex.size();i++){
+            int res;
+            try{
+            res = exception.getNumber(searchindex.get(i));
+                System.out.println(res);
+            }
+            catch(ArgumentException e)
+            {
+                System.out.println("System.ArgumentException");
+            }
+            catch(IndexOutOfRangeException e){
+                System.out.println("System.IndexOutOfRangeException");
+            }
+        }
+    }
+}
